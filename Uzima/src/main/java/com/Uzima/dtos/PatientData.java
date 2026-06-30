@@ -15,7 +15,7 @@ public class PatientData {
     private String phoneNumber;
     private Gender gender;
 
-    public  PatientData toData(Patient patient) {
+    public static PatientData toData(Patient patient) {
 
         PatientData patientData = new PatientData();
          patientData.setPatientNumber(patient.getPatientNumber());
@@ -28,7 +28,7 @@ public class PatientData {
          return patientData;
     }
 
-    public  Patient fromData (PatientData patientData) {
+    public static Patient fromData (PatientData patientData) {
 
         Patient patient = new Patient();
         patient.setPatientNumber(patientData.getPatientNumber());
