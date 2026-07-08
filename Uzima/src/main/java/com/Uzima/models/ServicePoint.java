@@ -1,14 +1,10 @@
 package com.Uzima.models;
 
-
-import com.Uzima.enums.PointName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -19,14 +15,10 @@ import java.util.List;
 public class ServicePoint extends Auditable{
 
     @Column(name = "point_name")
-    @Enumerated(EnumType.STRING)
-    private PointName servicePoint;
+    private String pointName;
 
-    @OneToMany(mappedBy = "servicePoint")
-    private List<Patient> patients;
-
-    @OneToMany(mappedBy = "servicePoint")
-    private List<Doctor> doctors;
+    @Column(name = "deleted_flag")
+    private Boolean deletedFlag = false;
 
 }
 

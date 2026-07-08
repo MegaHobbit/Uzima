@@ -27,7 +27,8 @@ public class PatientController {
     }
 
     @GetMapping("/Retrieve/{id}")
-    public PatientData getPatient(@PathVariable("id") Long id) {
+    public PatientData getPatient(@PathVariable("id") Long id)
+    {
         return patientService.getPatient(id);
     }
 

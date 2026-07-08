@@ -31,8 +31,4 @@ public class Doctor extends Auditable {
     @Column(name = "deleted_flag")
     private Boolean isDeletedFlag = false;
 
-    @ManyToOne
-    @JoinColumn(name = "service_point_id")
-    private ServicePoint servicePoint;
-
 }

@@ -32,14 +32,11 @@ public class Patient extends Auditable {
     private String phoneNumber;
 
     @Column(name = "gender")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Gender gender;
 
     @Column(name = "deleted_flag")
     private Boolean isDeleted = false;
 
-    @ManyToOne
-    @JoinColumn(name = "service_point_id")
-    private ServicePoint servicePoint;
 
 }
