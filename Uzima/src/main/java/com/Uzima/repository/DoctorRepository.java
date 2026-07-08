@@ -1,0 +1,7 @@
+package com.Uzima.repository;
+
+import com.Uzima.models.Doctor;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+}

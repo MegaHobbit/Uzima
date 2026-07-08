@@ -23,7 +23,7 @@ public class PatientService {
 
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Patient with id: "+ id + " could not be found"));
+                        new RuntimeException("Patient with id: " + id + " could not be found"));
 
 
         patient.setPatientNumber(patientData.getPatientNumber());
@@ -35,7 +35,7 @@ public class PatientService {
 
         patientRepository.save(patient);
 
-        log.info("Patient "+ patient.getFirstName() + " updated Successfully");
+        log.info("Patient " + patient.getFirstName() + " updated Successfully");
 
         return PatientData.toData(patient);
     }
@@ -46,7 +46,7 @@ public class PatientService {
 
         Patient savedPatient = patientRepository.save(patient);
 
-        log.info("Patient "+ savedPatient.getFirstName() + " created Successfully");
+        log.info("Patient " + savedPatient.getFirstName() + " created Successfully");
 
         return PatientData.toData(savedPatient);
     }
@@ -54,28 +54,31 @@ public class PatientService {
     public PatientData getPatient(Long id) {
 
         Patient gottenPatient = patientRepository.findById(id)
-                    .orElseThrow(() ->
-                            new RuntimeException("Patient with id: "+ id + " could not be found"));
+                .orElseThrow(() ->
+                        new RuntimeException("Patient with id: " + id + " could not be found"));
 
-            return PatientData.toData(gottenPatient);
+        return PatientData.toData(gottenPatient);
 
     }
+
 
     public String deletePatient(Long id) {
 
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Patient with id: "+ id + " could not be found"));
+                        new RuntimeException("Patient with id: " + id + " could not be found"));
 
-        patientRepository.delete(patient);
-        log.info("Patient "+ patient.getFirstName() + " deleted Successfully");
+        patient.setIsDeleted(true);
+        patientRepository.save(patient);
 
-        return "Patient "+ patient.getFirstName() + " has been deleted";
+        log.info("Patient " + patient.getFirstName() + " deleted Successfully");
+
+        return "Patient " + patient.getFirstName() + " has been deleted";
     }
 
     public ResponseEntity<List<PatientData>> getAllPatients() {
 
-        List <Patient> patients = patientRepository.findAll();
+        List<Patient> patients = patientRepository.findAll();
 
         List<PatientData> patientList = patients.stream()
                 .map(PatientData::toData)

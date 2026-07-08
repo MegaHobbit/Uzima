@@ -34,7 +34,7 @@ public class PatientController {
 
     @PutMapping("/{id}")
     public PatientData updatePatient(
-            @PathVariable ("id") Long id,
+            @PathVariable("id") Long id,
             @RequestBody PatientData patientData) {
 
         return patientService.updatePatient(id, patientData);
@@ -50,7 +50,7 @@ public class PatientController {
     @GetMapping("/get-all")
     public ResponseEntity<List<PatientData>> getAllPatients() {
 
-       return patientService.getAllPatients();
+        return patientService.getAllPatients();
     }
 
 }
