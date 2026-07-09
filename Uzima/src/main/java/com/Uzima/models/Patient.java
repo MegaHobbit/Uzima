@@ -39,4 +39,7 @@ public class Patient extends Auditable {
     private Boolean isDeleted = false;
 
 
+    @ManyToOne
+
+    private Patient patient;
 }

@@ -18,7 +18,8 @@ public class ServicePointController {
     private final ServicePointService servicePointService;
 
     @PostMapping("/create")
-    public ServicePointData createServicePoint(@RequestBody ServicePointData servicePointData) {
+    public ResponseEntity<List<ServicePointData>> createServicePoint(
+            @RequestBody List<ServicePointData> servicePointData) {
 
         return servicePointService.createServicePoint(servicePointData);
 
@@ -32,9 +33,10 @@ public class ServicePointController {
     }
 
     @GetMapping("/get_all")
-    public ResponseEntity<List<ServicePointData>> getAllServicePoint() {
+    public ResponseEntity<List<ServicePointData>> getAllServicePoint(
+            @RequestParam (value = "deleted_flag",required = false)  Boolean deletedFlag) {
 
-        return servicePointService.getAvailableServicePoints();
+        return servicePointService.getAvailableServicePoints(deletedFlag);
     }
 
     @PutMapping("/update")

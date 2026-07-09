@@ -16,13 +16,21 @@ public class ServicePointService {
 
     private final ServicePointRepository servicePointRepository;
 
-    public ServicePointData createServicePoint(ServicePointData servicePointData) {
+    public ResponseEntity<List<ServicePointData>> createServicePoint(List<ServicePointData> servicePointData) {
 
-        ServicePoint createdServicePoint = ServicePointData.fromData(servicePointData);
+        List<ServicePoint> servicePoints = servicePointData.stream()
+                .map(ServicePointData::fromData)
+                .toList();
 
-        servicePointRepository.save(createdServicePoint);
+        List<ServicePoint> savedServicePoints = servicePointRepository.saveAll(servicePoints);
 
-        return ServicePointData.toData(createdServicePoint);
+        List<ServicePointData> savedServicePointsData =
+                savedServicePoints.stream()
+                        .map(ServicePointData::toData)
+                        .toList();
+
+        return ResponseEntity.ok(savedServicePointsData);
+
     }
 
     public ServicePointData getThisServicePoint(Long id) {
@@ -43,10 +51,12 @@ public class ServicePointService {
         return ServicePointData.toData(servicePointRepository.save(servicePoint));
     }
 
-    public ResponseEntity<List<ServicePointData>> getAvailableServicePoints() {
+    public ResponseEntity<List<ServicePointData>> getAvailableServicePoints(Boolean deletedFlag) {
 
-        List<ServicePoint> servicePoints = servicePointRepository.findAll();
-
+        List<ServicePoint> servicePoints = servicePointRepository.findAllByDeletedFlag(deletedFlag);
+        if (servicePoints.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
 
         List<ServicePointData> servicePointsData = servicePoints.stream()
                 .map(ServicePointData::toData)
@@ -58,7 +68,7 @@ public class ServicePointService {
     public String deleteThisServicePoint(Long id) {
 
         ServicePoint servicePoint = servicePointRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service point with id: " + id + " could not be found"));
+                .orElseThrow(() -> new RuntimeException("Service Point with id: " + id + " does not exist"));
 
         servicePoint.setDeletedFlag(true);
         servicePointRepository.save(servicePoint);
