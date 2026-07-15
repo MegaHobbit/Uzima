@@ -32,7 +32,7 @@ public class Patient extends Auditable {
     private String phoneNumber;
 
     @Column(name = "gender")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Column(name = "deleted_flag")

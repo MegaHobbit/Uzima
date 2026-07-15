@@ -1,6 +1,7 @@
 package com.uzima.dtos;
 
 
+import com.uzima.enums.PointStatus;
 import com.uzima.models.ServicePoint;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -9,19 +10,26 @@ import lombok.Data;
 
 public class ServicePointData {
 
-    private String PointName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
+
+    private String pointName;
+
+    private String description;
+
+    private PointStatus pointStatus;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean deletedFlag;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
 
     public static ServicePointData toData(ServicePoint servicePoint) {
 
         ServicePointData servicePointData = new ServicePointData();
         servicePointData.setPointName(servicePoint.getPointName());
+        servicePointData.setDescription(servicePoint.getDescription());
         servicePointData.setDeletedFlag(servicePoint.getDeletedFlag());
+        servicePointData.setPointStatus(servicePoint.getStatus());
         servicePointData.setId(servicePoint.getId());
 
         return servicePointData;
@@ -31,6 +39,8 @@ public class ServicePointData {
 
         ServicePoint servicePoint = new ServicePoint();
         servicePoint.setPointName(servicePointData.getPointName());
+        servicePoint.setDescription(servicePointData.getDescription());
+
         servicePoint.setDeletedFlag(false);
 
         return servicePoint;

@@ -4,18 +4,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @MappedSuperclass
+@EqualsAndHashCode(of = "id", callSuper = false)
 public abstract class Auditable {
 
     @Id
@@ -23,5 +19,7 @@ public abstract class Auditable {
     private Long id;
     private LocalDateTime createdOn;
     private String createdBy;
+    private LocalDateTime modifiedOn;
+    private String modifiedBy;
 
 }

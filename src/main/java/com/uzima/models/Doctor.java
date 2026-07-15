@@ -31,7 +31,7 @@ public class Doctor extends Auditable {
     private String phoneNumber;
 
     @Column(name = "deleted_flag")
-    private Boolean isDeletedFlag = false;
+    private Boolean deletedFlag = false;
 
     @ManyToOne
     @JoinColumn(name = "service_point_id")

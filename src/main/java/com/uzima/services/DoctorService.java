@@ -77,7 +77,7 @@ public class DoctorService {
                 .orElseThrow(() -> new RuntimeException("Doctor with id: " + id + " could not be found"));
 
 
-        doctor.setIsDeletedFlag(true);
+        doctor.setDeletedFlag(true);
         doctorRepository.save(doctor);
 
         log.info("Doctor with id: {} is deleted!!!", id);
