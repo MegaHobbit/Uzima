@@ -1,6 +1,7 @@
 package com.uzima.controllers;
 
 import com.uzima.dtos.DoctorData;
+import com.uzima.dtos.DoctorRequest;
 import com.uzima.repository.DoctorRepository;
 import com.uzima.services.DoctorService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,9 @@ public class DoctorController {
 
 
     @PostMapping("/create_doctor")
-    public ResponseEntity<List<DoctorData>> createDoctor(@RequestBody List<DoctorData> doctorData) {
+    public ResponseEntity<List<DoctorData>> createDoctor(@RequestBody List<DoctorRequest> doctorRequest) {
 
-        return doctorService.postNewDoctors(doctorData);
+        return doctorService.postNewDoctors(doctorRequest);
 
     }
 

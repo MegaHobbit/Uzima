@@ -11,6 +11,10 @@ public class DoctorData {
     private String lastName;
     private String phoneNumber;
 
+//    from foreign key
+    private Long servicePointId;
+    private String servicePointName;
+
     public static DoctorData toData(Doctor doctor) {
 
         DoctorData doctorData = new DoctorData();
@@ -18,19 +22,9 @@ public class DoctorData {
         doctorData.setFirstName(doctor.getFirstName());
         doctorData.setLastName(doctor.getLastName());
         doctorData.setPhoneNumber(doctor.getPhoneNumber());
+        doctorData.setServicePointId(doctor.getServicePoint().getId());
+        doctorData.setServicePointName(doctor.getServicePoint().getPointName());
 
         return doctorData;
-    }
-
-    public static Doctor fromData(DoctorData doctorData) {
-
-        Doctor doctor = new Doctor();
-
-        doctor.setDoctorNumber(doctorData.getDoctorNumber());
-        doctor.setFirstName(doctorData.getFirstName());
-        doctor.setLastName(doctorData.getLastName());
-        doctor.setPhoneNumber(doctorData.getPhoneNumber());
-
-        return doctor;
     }
 }

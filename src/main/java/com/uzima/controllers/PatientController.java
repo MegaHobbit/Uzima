@@ -1,6 +1,8 @@
 package com.uzima.controllers;
 
 import com.uzima.dtos.PatientData;
+import com.uzima.dtos.PatientDetails;
+import com.uzima.dtos.PatientRequest;
 import com.uzima.services.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,24 +21,35 @@ public class PatientController {
 
     @PostMapping("/create")
     public ResponseEntity<List<PatientData>> savePatient(
-            @RequestBody List<PatientData> patientData) {
+            @RequestBody List<PatientRequest> patientRequest) {
 
-        return patientService.createPatient(patientData);
+        return patientService.createPatient(patientRequest);
     }
 
     @GetMapping("/Retrieve/{id}")
-    public PatientData getPatient(@PathVariable("id") Long id)
-    {
+    public PatientData getPatient(@PathVariable("id") Long id) {
         return patientService.getPatient(id);
     }
 
+    @GetMapping("/get-all")
+    public ResponseEntity<List<PatientData>> getAllPatients() {
+
+        return patientService.getAllPatients();
+    }
+
+    @GetMapping("/get-patient-details")
+    public PatientDetails getNewPatientDetail(
+            @RequestParam("id") Long id) {
+
+        return patientService.getGottenPatientDetails(id);
+    }
 
     @PutMapping("/{id}")
     public PatientData updatePatient(
             @PathVariable("id") Long id,
-            @RequestBody PatientData patientData) {
+            @RequestBody PatientRequest patientRequest) {
 
-        return patientService.updatePatient(id, patientData);
+        return patientService.updatePatient(id, patientRequest);
 
     }
 
@@ -46,10 +59,5 @@ public class PatientController {
         return patientService.deletePatient(id);
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<PatientData>> getAllPatients() {
-
-        return patientService.getAllPatients();
-    }
 
 }

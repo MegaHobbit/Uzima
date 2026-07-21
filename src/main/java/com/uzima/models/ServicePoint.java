@@ -21,9 +21,9 @@ public class ServicePoint extends Auditable{
     @Column(name = "description")
     private String description;
 
-    @Column(name = "point_status")
+    @Column(name = "point_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PointStatus status;
+    private PointStatus pointStatus;
 
     @Column(name = "deleted_flag")
     private Boolean deletedFlag = false;

@@ -34,7 +34,7 @@ public class Doctor extends Auditable {
     private Boolean deletedFlag = false;
 
     @ManyToOne
-    @JoinColumn(name = "service_point_id")
+    @JoinColumn(name = "service_point_id", nullable = false)
     private ServicePoint servicePoint;
 
     @OneToMany(mappedBy = "doctor")

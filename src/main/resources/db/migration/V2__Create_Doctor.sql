@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS doctor
     deleted_flag     BOOLEAN,
 
     --foreign key column
-    service_point_id BIGINT,
+    service_point_id BIGINT NOT NULL,
 
     CONSTRAINT fk_service_point
         FOREIGN KEY (service_point_id)

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS patient
     patient_number VARCHAR(50),
 
     --foreign key columns
-    doctor_id      BIGINT,
+    doctor_id      BIGINT NOT NULL,
 
     CONSTRAINT fk_doctor_id
         FOREIGN KEY (doctor_id)

@@ -1,16 +1,16 @@
 CREATE TABLE IF NOT EXISTS service_point
 (
     --from auditable
-    id           BIGINT NOT NULL,
+    id           BIGINT      NOT NULL,
     created_on   TIMESTAMP,
     created_by   VARCHAR(255),
     modified_on  TIMESTAMP,
     modified_by  VARCHAR(255),
 
     --from service_point
-    point_name   VARCHAR(50),
+    point_name   VARCHAR(50) NOT NULL,
     description  VARCHAR(256),
-    point_status VARCHAR(20),
+    point_status VARCHAR(20) NOT NULL,
     deleted_flag BOOLEAN
 
 );

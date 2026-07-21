@@ -1,8 +1,11 @@
 package com.uzima.services;
 
 import com.uzima.dtos.DoctorData;
+import com.uzima.dtos.DoctorRequest;
 import com.uzima.models.Doctor;
+import com.uzima.models.ServicePoint;
 import com.uzima.repository.DoctorRepository;
+import com.uzima.repository.ServicePointRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +19,27 @@ import java.util.List;
 public class DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final ServicePointRepository servicePointRepository;
 
 
-    public ResponseEntity<List<DoctorData>> postNewDoctors(List<DoctorData> doctorData) {
+    public ResponseEntity<List<DoctorData>> postNewDoctors(List<DoctorRequest> doctorRequests) {
 
-        List<Doctor> doctors = doctorData.stream()
-                .map(DoctorData::fromData)
+        List<Doctor> doctors = doctorRequests.stream()
+                .map
+                        (doctorRequest ->
+                                {
+                                    Doctor doctor = DoctorRequest.fromRequest(doctorRequest);
+
+                                    ServicePoint servicePoint = servicePointRepository
+                                            .findById(doctorRequest.getServicePointId())
+                                            .orElseThrow(() ->
+                                                    new RuntimeException("Service Point not found"));
+
+                                    doctor.setServicePoint(servicePoint);
+
+                                    return doctor;
+                                }
+                        )
                 .toList();
 
         List<Doctor> savedDoctors = doctorRepository.saveAll(doctors);
@@ -65,7 +83,13 @@ public class DoctorService {
         doctor.setDoctorNumber(doctorData.getDoctorNumber());
         doctor.setPhoneNumber(doctorData.getPhoneNumber());
 
-        log.info("Doctor with id: {} is updated!!!", id);
+
+        doctor.setServicePoint(servicePointRepository.findById(doctorData.getServicePointId())
+                .orElseThrow(() -> new RuntimeException("Service Point not found"))
+
+        );
+
+                log.info("Doctor with id: {} is updated!!!", id);
         return DoctorData.toData(doctorRepository.save(doctor));
 
 

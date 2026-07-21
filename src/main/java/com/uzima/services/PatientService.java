@@ -1,9 +1,15 @@
 package com.uzima.services;
 
 import com.uzima.dtos.PatientData;
+import com.uzima.dtos.PatientDetails;
+import com.uzima.dtos.PatientRequest;
+import com.uzima.models.Doctor;
 import com.uzima.models.Patient;
+import com.uzima.models.ServicePoint;
+import com.uzima.repository.DoctorRepository;
 import com.uzima.repository.PatientRepository;
-import lombok.*;
+import com.uzima.repository.ServicePointRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,21 +23,24 @@ import java.util.List;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
+    private final ServicePointRepository servicePointRepository;
 
-    public PatientData updatePatient(Long id, PatientData patientData) {
-
-
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Patient with id: " + id + " could not be found"));
+    public PatientData updatePatient(Long id, PatientRequest patientRequest) {
 
 
-        patient.setPatientNumber(patientData.getPatientNumber());
-        patient.setPhoneNumber(patientData.getPhoneNumber());
-        patient.setFirstName(patientData.getFirstName());
-        patient.setLastName(patientData.getLastName());
-        patient.setEmail(patientData.getEmail());
-        patient.setGender(patientData.getGender());
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
+
+
+        patient.setPatientNumber(patientRequest.getPatientNumber());
+        patient.setPhoneNumber(patientRequest.getPhoneNumber());
+        patient.setFirstName(patientRequest.getFirstName());
+        patient.setLastName(patientRequest.getLastName());
+        patient.setEmail(patientRequest.getEmail());
+        patient.setGender(patientRequest.getGender());
+
+        patient.setDoctor(doctorRepository.findById(patientRequest.getDoctorId())
+                .orElseThrow(() -> new RuntimeException("Doctor with id: " + patientRequest.getDoctorId() + " could not be found")));
 
         patientRepository.save(patient);
 
@@ -40,17 +49,25 @@ public class PatientService {
         return PatientData.toData(patient);
     }
 
-    public ResponseEntity<List<PatientData>> createPatient(List<PatientData> patientData) {
+    public ResponseEntity<List<PatientData>> createPatient(List<PatientRequest> patientRequests) {
 
-        List<Patient> patientsList = patientData.stream()
-                .map(PatientData::fromData)
+        List<Patient> patientsList = patientRequests.stream()
+                .map(patientRequest ->
+                        {
+                            Patient patient = PatientRequest.fromRequest(patientRequest);
+
+                            Doctor doctor = doctorRepository.findById(patientRequest.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor with id: " + patientRequest.getDoctorId() + " could not be found"));
+
+                            patient.setDoctor(doctor);
+
+                            return patient;
+                        }
+                )
                 .toList();
 
         List<Patient> savedPatients = patientRepository.saveAll(patientsList);
 
-        List<PatientData> savedPatientData = savedPatients.stream()
-                .map(PatientData::toData)
-                .toList();
+        List<PatientData> savedPatientData = savedPatients.stream().map(PatientData::toData).toList();
 
         log.info("Patients created Successfully");
 
@@ -59,9 +76,7 @@ public class PatientService {
 
     public PatientData getPatient(Long id) {
 
-        Patient gottenPatient = patientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Patient with id: " + id + " could not be found"));
+        Patient gottenPatient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
 
         return PatientData.toData(gottenPatient);
 
@@ -70,9 +85,7 @@ public class PatientService {
 
     public String deletePatient(Long id) {
 
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Patient with id: " + id + " could not be found"));
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
 
         patient.setIsDeleted(true);
         patientRepository.save(patient);
@@ -86,13 +99,27 @@ public class PatientService {
 
         List<Patient> patients = patientRepository.findAll();
 
-        List<PatientData> patientList = patients.stream()
-                .map(PatientData::toData)
-                .toList();
+        List<PatientData> patientList = patients.stream().map(PatientData::toData).toList();
 
         log.info("Patients found successfully");
 
         return ResponseEntity.ok(patientList);
     }
 
+    public PatientDetails getGottenPatientDetails(Long id) {
+
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
+
+        Doctor doctor = doctorRepository.findById(patient.getDoctor().getId())
+                .orElseThrow(() -> new RuntimeException("Doctor with id: " + patient.getDoctor().getId() + " could not be found"));
+
+        ServicePoint servicePoint = servicePointRepository.findById(doctor.getServicePoint().getId())
+                .orElseThrow(() -> new RuntimeException("Doctor with id: " + patient.getDoctor().getId() + " could not be found"));
+
+
+        PatientDetails gottenPatientDetails = PatientDetails.toData(patient, doctor, servicePoint);
+
+        return gottenPatientDetails;
+    }
 }

@@ -29,7 +29,7 @@ public class ServicePointData {
         servicePointData.setPointName(servicePoint.getPointName());
         servicePointData.setDescription(servicePoint.getDescription());
         servicePointData.setDeletedFlag(servicePoint.getDeletedFlag());
-        servicePointData.setPointStatus(servicePoint.getStatus());
+        servicePointData.setPointStatus(servicePoint.getPointStatus());
         servicePointData.setId(servicePoint.getId());
 
         return servicePointData;
@@ -40,6 +40,7 @@ public class ServicePointData {
         ServicePoint servicePoint = new ServicePoint();
         servicePoint.setPointName(servicePointData.getPointName());
         servicePoint.setDescription(servicePointData.getDescription());
+        servicePoint.setPointStatus(servicePointData.getPointStatus());
 
         servicePoint.setDeletedFlag(false);
 
