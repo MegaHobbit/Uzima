@@ -14,6 +14,7 @@ public class PatientData {
     private String email;
     private String phoneNumber;
     private Gender gender;
+    private Long id;
 
     public static PatientData toData(Patient patient) {
 
@@ -24,6 +25,7 @@ public class PatientData {
         patientData.setEmail(patient.getEmail());
         patientData.setPhoneNumber(patient.getPhoneNumber());
         patientData.setGender(patient.getGender());
+        patientData.setId(patient.getId());
 
         return patientData;
     }
