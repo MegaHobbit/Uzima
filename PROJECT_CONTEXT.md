@@ -271,7 +271,7 @@ This document was compiled from local repository inspection, Git history, Postgr
 ### Repository
 - GitHub repository: https://github.com/MegaHobbit/Uzima
 - Local project path: C:\Users\JetCore Computers\Desktop\Uzima
-- Current branch: master
+- Current branch: develop
 - Repository structure (verified from local tree):
   - .mvn/, mvnw, mvnw.cmd, pom.xml
   - src/main/java/com/uzima/
