@@ -1,8 +1,8 @@
 package com.uzima.services;
 
-import com.uzima.dtos.PatientData;
-import com.uzima.dtos.PatientDetails;
+import com.uzima.Mapper.PatientMapper;
 import com.uzima.dtos.PatientRequest;
+import com.uzima.dtos.PatientResponse;
 import com.uzima.models.Doctor;
 import com.uzima.models.Patient;
 import com.uzima.models.ServicePoint;
@@ -26,18 +26,13 @@ public class PatientService {
     private final DoctorRepository doctorRepository;
     private final ServicePointRepository servicePointRepository;
 
-    public PatientData updatePatient(Long id, PatientRequest patientRequest) {
+    public PatientResponse updatePatient(Long id, PatientRequest patientRequest) {
 
 
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
 
 
-        patient.setPatientNumber(patientRequest.getPatientNumber());
-        patient.setPhoneNumber(patientRequest.getPhoneNumber());
-        patient.setFirstName(patientRequest.getFirstName());
-        patient.setLastName(patientRequest.getLastName());
-        patient.setEmail(patientRequest.getEmail());
-        patient.setGender(patientRequest.getGender());
+        PatientMapper.updatePatient(patient, patientRequest);
 
         patient.setDoctor(doctorRepository.findById(patientRequest.getDoctorId())
                 .orElseThrow(() -> new RuntimeException("Doctor with id: " + patientRequest.getDoctorId() + " could not be found")));
@@ -46,17 +41,18 @@ public class PatientService {
 
         log.info("Patient " + patient.getFirstName() + " updated Successfully");
 
-        return PatientData.toData(patient);
+        return PatientMapper.toResponse(patient);
     }
 
-    public ResponseEntity<List<PatientData>> createPatient(List<PatientRequest> patientRequests) {
+    public ResponseEntity<List<PatientResponse>> createPatient(List<PatientRequest> patientRequests) {
 
         List<Patient> patientsList = patientRequests.stream()
                 .map(patientRequest ->
                         {
-                            Patient patient = PatientRequest.fromRequest(patientRequest);
+                            Patient patient = PatientMapper.fromRequest(patientRequest);
 
-                            Doctor doctor = doctorRepository.findById(patientRequest.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor with id: " + patientRequest.getDoctorId() + " could not be found"));
+                            Doctor doctor = doctorRepository.findById(patientRequest.getDoctorId())
+                                    .orElseThrow(() -> new RuntimeException("Doctor with id: " + patientRequest.getDoctorId() + " could not be found"));
 
                             patient.setDoctor(doctor);
 
@@ -67,18 +63,18 @@ public class PatientService {
 
         List<Patient> savedPatients = patientRepository.saveAll(patientsList);
 
-        List<PatientData> savedPatientData = savedPatients.stream().map(PatientData::toData).toList();
+        List<PatientResponse> savedPatientData = savedPatients.stream().map(PatientMapper::toResponse).toList();
 
         log.info("Patients created Successfully");
 
         return ResponseEntity.ok(savedPatientData);
     }
 
-    public PatientData getPatient(Long id) {
+    public PatientResponse getPatient(Long id) {
 
         Patient gottenPatient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
 
-        return PatientData.toData(gottenPatient);
+        return PatientMapper.toResponse(gottenPatient);
 
     }
 
@@ -95,18 +91,18 @@ public class PatientService {
         return "Patient " + patient.getFirstName() + " has been deleted";
     }
 
-    public ResponseEntity<List<PatientData>> getAllPatients() {
+    public ResponseEntity<List<PatientResponse>> getAllPatients() {
 
         List<Patient> patients = patientRepository.findAll();
 
-        List<PatientData> patientList = patients.stream().map(PatientData::toData).toList();
+        List<PatientResponse> patientList = patients.stream().map(PatientMapper::toResponse).toList();
 
         log.info("Patients found successfully");
 
         return ResponseEntity.ok(patientList);
     }
 
-    public PatientDetails getGottenPatientDetails(Long id) {
+    public PatientResponse getGottenPatientDetails(Long id) {
 
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient with id: " + id + " could not be found"));
@@ -118,8 +114,8 @@ public class PatientService {
                 .orElseThrow(() -> new RuntimeException("Doctor with id: " + patient.getDoctor().getId() + " could not be found"));
 
 
-        PatientDetails gottenPatientDetails = PatientDetails.toData(patient, doctor, servicePoint);
+        PatientResponse gottenPatientResponse = PatientMapper.toResponse(patient);
 
-        return gottenPatientDetails;
+        return gottenPatientResponse;
     }
 }

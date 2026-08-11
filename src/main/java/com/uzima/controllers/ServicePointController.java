@@ -1,6 +1,7 @@
 package com.uzima.controllers;
 
-import com.uzima.dtos.ServicePointData;
+import com.uzima.dtos.ServicePointRequest;
+import com.uzima.dtos.ServicePointResponse;
 import com.uzima.services.ServicePointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,33 +19,33 @@ public class ServicePointController {
     private final ServicePointService servicePointService;
 
     @PostMapping("/create")
-    public ResponseEntity<List<ServicePointData>> createServicePoint(
-            @RequestBody List<ServicePointData> servicePointData) {
+    public ResponseEntity<List<ServicePointResponse>> createServicePoint(
+            @RequestBody List<ServicePointRequest> servicePointRequest) {
 
-        return servicePointService.createServicePoint(servicePointData);
+        return servicePointService.createServicePoint(servicePointRequest);
 
     }
 
     @GetMapping("/get")
-    public ServicePointData getThisServicePoint(
+    public ServicePointResponse getThisServicePoint(
             @RequestParam("id") Long id) {
 
         return servicePointService.getThisServicePoint(id);
     }
 
     @GetMapping("/get_all")
-    public ResponseEntity<List<ServicePointData>> getAllServicePoint(
-            @RequestParam (value = "deleted_flag",required = false)  Boolean deletedFlag) {
+    public ResponseEntity<List<ServicePointResponse>> getAllServicePoint(
+            @RequestParam(value = "deleted_flag", required = false) Boolean deletedFlag) {
 
         return servicePointService.getAvailableServicePoints(deletedFlag);
     }
 
     @PutMapping("/update")
-    public ServicePointData updateServicePoint(
+    public ServicePointResponse updateServicePoint(
             @RequestParam("id") Long id,
-            @RequestBody ServicePointData servicePointData) {
+            @RequestBody ServicePointRequest request) {
 
-        return servicePointService.updateThisServicePoint(id, servicePointData);
+        return servicePointService.updateThisServicePoint(id, request);
     }
 
     @DeleteMapping("/delete")

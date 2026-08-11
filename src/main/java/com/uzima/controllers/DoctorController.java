@@ -1,7 +1,7 @@
 package com.uzima.controllers;
 
-import com.uzima.dtos.DoctorData;
 import com.uzima.dtos.DoctorRequest;
+import com.uzima.dtos.DoctorResponse;
 import com.uzima.repository.DoctorRepository;
 import com.uzima.services.DoctorService;
 import lombok.RequiredArgsConstructor;
@@ -20,28 +20,28 @@ public class DoctorController {
 
 
     @PostMapping("/create_doctor")
-    public ResponseEntity<List<DoctorData>> createDoctor(@RequestBody List<DoctorRequest> doctorRequest) {
+    public ResponseEntity<List<DoctorResponse>> createDoctor(@RequestBody List<DoctorRequest> doctorRequest) {
 
         return doctorService.postNewDoctors(doctorRequest);
 
     }
 
     @GetMapping("/get/doctor")
-    public DoctorData getDoctor(@RequestParam("/id") Long id) {
+    public DoctorResponse getDoctor(@RequestParam("/id") Long id) {
 
         return doctorService.getDoctor(id);
     }
 
     @GetMapping("/get/all_doctors")
-    public ResponseEntity<List<DoctorData>> getAllDoctor() {
+    public ResponseEntity<List<DoctorResponse>> getAllDoctor() {
 
         return doctorService.getAllDoctor();
     }
 
     @PutMapping("/update/doctor")
-    public DoctorData updateDoctor(@RequestParam("/id") Long id, @RequestBody DoctorData doctorData) {
+    public DoctorResponse updateDoctor(@RequestParam("/id") Long id, @RequestBody DoctorRequest request) {
 
-        return doctorService.updateThisDoctor(id, doctorData);
+        return doctorService.updateThisDoctor(id, request);
     }
 
     @DeleteMapping("/delete/doctor")

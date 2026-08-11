@@ -1,19 +1,18 @@
 package com.uzima.dtos;
 
-import com.uzima.models.Doctor;
 import lombok.Data;
 
 @Data
+public class DoctorResponse {
 
-public class DoctorRequest {
-
+    private Long id;
     private String doctorNumber;
     private String firstName;
     private String lastName;
     private String phoneNumber;
 
+
     //    from foreign key
     private Long servicePointId;
-
-
+    private String servicePointName;
 }

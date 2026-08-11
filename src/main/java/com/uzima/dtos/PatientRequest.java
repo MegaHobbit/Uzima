@@ -18,18 +18,5 @@ public class PatientRequest {
     //    from foreign key
     private Long doctorId;
 
-    public static Patient fromRequest(PatientRequest patientRequest) {
-
-        Patient patient = new Patient();
-        patient.setPatientNumber(patientRequest.getPatientNumber());
-        patient.setFirstName(patientRequest.getFirstName());
-        patient.setLastName(patientRequest.getLastName());
-        patient.setEmail(patientRequest.getEmail());
-        patient.setPhoneNumber(patientRequest.getPhoneNumber());
-        patient.setGender(patientRequest.getGender());
-
-        return patient;
-    }
-
 
 }
