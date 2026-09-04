@@ -15,8 +15,10 @@ CREATE TABLE IF NOT EXISTS appointment
     notes                 VARCHAR(255),
     appointment_type      VARCHAR(255),
     deleted_flag          BOOLEAN,
+    reminder_sent_at      TIMESTAMP,
 
-    --foreign key columns
+
+--foreign key columns
     doctor_id             BIGINT      NOT NULL,
     patient_id            BIGINT      NOT NULL,
     service_point_id      BIGINT      NOT NULL,

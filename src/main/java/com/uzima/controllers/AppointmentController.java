@@ -17,10 +17,10 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @PostMapping("/create")
-    public ResponseEntity<AppointmentResponse> createAppointment(
-            @RequestBody AppointmentRequest request) {
+    public ResponseEntity<List<AppointmentResponse>> createAppointment(
+            @RequestBody List<AppointmentRequest> requests) {
 
-        return ResponseEntity.ok(appointmentService.createNewAppointment(request));
+        return ResponseEntity.ok(appointmentService.createNewAppointments(requests));
     }
 
     @GetMapping("/Retrieve/{id}")
