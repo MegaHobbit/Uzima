@@ -1,1 +1,5 @@
-com\Uzima\UzimaApplicationTests.class
+com\uzima\services\VisitServiceTest.class
+com\uzima\services\BillingServiceTest.class
+com\uzima\services\ConsultationServiceTest.class
+com\uzima\services\PrescriptionServiceTest.class
+com\uzima\services\ClinicalReportServiceTest.class

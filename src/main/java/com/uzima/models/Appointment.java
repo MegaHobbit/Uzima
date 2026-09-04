@@ -33,6 +33,9 @@ public class Appointment extends Auditable {
     @Column(name = "deleted_flag", nullable = false)
     private boolean deletedFlag = false;
 
+    @Column(name = "reminder_sent_at")
+    private LocalDateTime reminderSentAt;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "patient_id", nullable = false)

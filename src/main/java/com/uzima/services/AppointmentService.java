@@ -26,39 +26,41 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
 
 
-    public AppointmentResponse createNewAppointment(AppointmentRequest request) {
+    public List<AppointmentResponse> createNewAppointments(List<AppointmentRequest> requests) {
+        return requests.stream()
+                .map(request -> {
+                    // 1. Map request to entity
+                    Appointment appointment = AppointmentMapper.fromRequest(request);
+                    appointment.setDeletedFlag(false);
 
-        Appointment appointment = AppointmentMapper.fromRequest(request);
+                    // 2. Fetch and set relations
+                    appointment.setDoctor(
+                            doctorRepository.findById(request.getDoctorId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Doctor with id: " + request.getDoctorId() + " could not be found"))
+                    );
 
-        appointment.setDeletedFlag(false);
+                    appointment.setPatient(
+                            patientRepository.findById(request.getPatientId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Patient with id: " + request.getPatientId() + " could not be found"))
+                    );
 
-        appointment.setDoctor(
-                doctorRepository.findById(request.getDoctorId())
-                        .orElseThrow(() -> new RuntimeException(
-                                "Doctor with id: " + request.getDoctorId()
-                                        + " could not be found"))
-        );
+                    appointment.setServicePoint(
+                            servicePointRepository.findById(request.getServicePointId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Service Point with id: " + request.getServicePointId() + " could not be found"))
+                    );
 
-        appointment.setPatient(
-                patientRepository.findById(request.getPatientId())
-                        .orElseThrow(() -> new RuntimeException(
-                                "Patient with id: " + request.getPatientId()
-                                        + " could not be found"))
-        );
+                    // 3. Save to database
+                    Appointment savedAppointment = appointmentRepository.save(appointment);
 
-        appointment.setServicePoint(
-                servicePointRepository.findById(request.getServicePointId())
-                        .orElseThrow(() -> new RuntimeException(
-                                "Service Point with id: " + request.getServicePointId()
-                                        + " could not be found"))
-        );
-
-        Appointment savedAppointment =
-                appointmentRepository.save(appointment);
-
-        return AppointmentMapper.toResponse(savedAppointment);
-
+                    // 4. Map saved entity to response
+                    return AppointmentMapper.toResponse(savedAppointment);
+                })
+                .toList();
     }
+
 
     public AppointmentResponse getAppointment(Long id) {
 
